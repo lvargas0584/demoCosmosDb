@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/student")
-public class StudentController extends BaseController {
+@RequestMapping("/v1/product")
+public class ProductController extends BaseController {
 
-    Logger logger = LoggerFactory.getLogger(StudentController.class);
+    Logger logger = LoggerFactory.getLogger(ProductController.class);
     @Autowired
     StudentService studentService;
 
@@ -44,7 +44,6 @@ public class StudentController extends BaseController {
         studentService.deleteStudent(dto);
         return buildSuccessResponse();
     }
-
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

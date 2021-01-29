@@ -1,7 +1,5 @@
 package com.bcp.democosmosdb.core.service.impl;
 
-import com.azure.cosmos.implementation.NotFoundException;
-import com.azure.cosmos.models.PartitionKey;
 import com.bcp.democosmosdb.core.documents.AdrressDocument;
 import com.bcp.democosmosdb.core.documents.StudentDocument;
 import com.bcp.democosmosdb.core.dto.AdrressDto;
@@ -25,7 +23,7 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public void saveStudent(StudentDto dto) {
+    public StudentDto saveStudent(StudentDto dto) {
         StudentDocument studentDocument = new StudentDocument();
         BeanUtils.copyProperties(dto, studentDocument);
         AdrressDocument adrressDocument = new AdrressDocument();
@@ -33,16 +31,18 @@ public class StudentServiceImpl implements StudentService {
         adrressDocument.setNumber(dto.getAddress().getNumber());
         adrressDocument.setStreet(dto.getAddress().getStreet());
         studentDocument.setAddress(adrressDocument);
-        studentRepository.save(studentDocument);
+        StudentDocument save = studentRepository.save(studentDocument);
+        dto.setId(save.getId());
+        return dto;
     }
 
 
     @Override
     @Transactional
-    public void deleteStudent(String id, String lastName) {
-        /*StudentDocument studentDocument = new StudentDocument();
-        studentDocument.setId(id);
-        studentDocument.setLastName(lastName);
+    public void deleteStudent(StudentDto dto) {
+        StudentDocument studentDocument = new StudentDocument();
+        studentDocument.setId(dto.getId());
+        studentDocument.setLastName(dto.getLastName());
         BeanUtils.copyProperties(dto, studentDocument);
         AdrressDocument adrressDocument = new AdrressDocument();
         if (dto.getAddress() != null) {
@@ -50,10 +50,8 @@ public class StudentServiceImpl implements StudentService {
             adrressDocument.setNumber(dto.getAddress().getNumber());
             adrressDocument.setStreet(dto.getAddress().getStreet());
             studentDocument.setAddress(adrressDocument);
-        }*/
-
-        PartitionKey pk = new PartitionKey(lastName);
-        studentRepository.deleteById(id, pk);
+        }
+        studentRepository.delete(studentDocument);
     }
 
     @Override
@@ -80,7 +78,7 @@ public class StudentServiceImpl implements StudentService {
     public StudentDto getStudent(String id) {
         StudentDto studentDto = new StudentDto();
         //StudentDocument document = studentRepository.findById(id).orElseThrow(NotFoundException::new);
-        StudentDocument document = studentRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        StudentDocument document = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
 
         BeanUtils.copyProperties(document, studentDto);
         if (document.getAddress() != null) {

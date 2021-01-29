@@ -1,12 +1,13 @@
 package com.bcp.democosmosdb.api;
 
+import com.bcp.democosmosdb.core.dto.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public class BaseController {
     public <T> ResponseEntity buildSuccessResponse(List<T> list) {
-        return ResponseEntity.accepted().body(list);
+        return ResponseEntity.ok().body(list);
     }
 
     public <T> ResponseEntity buildSuccessResponse(T data) {
@@ -18,7 +19,7 @@ public class BaseController {
         return ResponseEntity.ok().build();
     }
 
-    public <T> ResponseEntity buildErrorResponse() {
+    public <T> ResponseEntity buildNotFoundResponse() {
         return ResponseEntity.notFound().build();
     }
 }

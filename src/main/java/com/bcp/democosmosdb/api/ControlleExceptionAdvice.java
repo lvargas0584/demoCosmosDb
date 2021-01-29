@@ -24,21 +24,21 @@ public class ControlleExceptionAdvice {
     }
 
     @ExceptionHandler(value = RuntimeException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse error(RuntimeException ex) {
         return new ErrorResponse(3, "ERROR EN SISTEMA");
     }
 
 
     @ExceptionHandler(value = NumberFormatException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse error(NumberFormatException ex) {
         return new ErrorResponse(3, "ERROR EN SISTEMA");
     }
 
 
     @ExceptionHandler(value = Exception.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse error(Exception ex) {
         return new ErrorResponse(3, ex.getMessage());
     }
